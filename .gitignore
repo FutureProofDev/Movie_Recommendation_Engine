@@ -16,3 +16,9 @@ __pycache__/
 # IDE configurations (optional but recommended)
 .vscode/
 .idea/
+
+# Ignore all contents inside the data folder
+data/*
+
+# Do NOT ignore the placeholder file keeping the folder alive
+!data/.gitkeep
