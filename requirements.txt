@@ -1,0 +1,16 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+jupyter
+streamlit
+
+
+to test if the packages are installed correctly, you can run the following command in your terminal or command prompt:
+Make sure you are in the Movie Recommendation Engine folder.
+
+import pandas as pd
+df = pd.read_csv('data/ml-100k/u.data', sep='\t', names=['user_id', 'item_id', 'rating', 'timestamp'])
+print(df.head())
+print(df.shape)
