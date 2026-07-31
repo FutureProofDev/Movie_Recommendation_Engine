@@ -1,0 +1,7 @@
+[theme]
+base = "light"
+primaryColor = "#E50914" # Cinematic Netflix red for interactive buttons
+
+[theme.sidebar]
+backgroundColor = "#141414" # Deep dark cinema background
+textColor = "#FFFFFF"       # Solid white text
