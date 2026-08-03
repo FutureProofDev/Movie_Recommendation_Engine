@@ -21,3 +21,5 @@ __pycache__/
 
 # Do NOT ignore the placeholder file keeping the folder alive
 !data/.gitkeep
+
+.DS_store
