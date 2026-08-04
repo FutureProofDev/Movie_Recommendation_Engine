@@ -109,26 +109,25 @@ if user_type == "2. Existing User":
 
     st.divider()
 
-    # ---------------------------------------------------------------------
-    # THE VIBE QUESTIONNAIRE UI
-    # ---------------------------------------------------------------------
+
+    #questionnaire
     col1, col2, col3 = st.columns(3)
 
     with col1:
         idx1 = genres.index(st.session_state.vibe_g1) if st.session_state.vibe_g1 in genres else None
-        # Framing as a question!
+
         g1 = st.selectbox("1. What's the main vibe you want?", options=genres, index=idx1, key="vibe_g1")
 
     with col2:
         g2_options = [g for g in genres if g != g1]
         idx2 = g2_options.index(st.session_state.vibe_g2) if st.session_state.vibe_g2 in g2_options else None
-        # Framing as a question!
+
         g2 = st.selectbox("2. What else should be in the mix?", options=g2_options, index=idx2, key="vibe_g2")
 
     with col3:
         g3_options = [g for g in genres if g not in [g1, g2]]
         idx3 = g3_options.index(st.session_state.vibe_g3) if st.session_state.vibe_g3 in g3_options else None
-        # Framing as a question!
+
         g3 = st.selectbox("3. Any final flavor to add?", options=g3_options, index=idx3, key="vibe_g3")
 
     user_selected = [g for g in [g1, g2, g3] if g is not None]
@@ -136,18 +135,13 @@ if user_type == "2. Existing User":
 
     st.write("")
 
-    # Single action button - NO saving to profile!
+
     find_movies = st.button("**Generate Session Recommendations**", type="primary", disabled=selected_count < 3)
 
     if find_movies:
         st.success(f"Finding the best {', '.join(user_selected)} movies for you right now...")
 
-        # -----------------------------------------------------------------
-        # BACKEND CALL GOES HERE
-        # We just pass `user_selected` to the K-Means function.
-        # Because we don't save it to a database, it's strictly temporary!
-        # -----------------------------------------------------------------
 
         st.subheader("🍿 Your Custom Picks for Today:")
-        # st.dataframe(your_generated_recommendations_here)
+
 
