@@ -25,11 +25,14 @@ import os
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "models")
 
-rf_model = joblib.load(os.path.join(MODEL_DIR, "rf_model.pkl"))
+# NOTE: filenames below match what 02_feature_engineering.ipynb and
+# 03_regression_model.ipynb actually save to disk — keep these in sync
+# if the save cells in either notebook are ever renamed.
+rf_model = joblib.load(os.path.join(MODEL_DIR, "random_forest_model.pkl"))
 kmeans_model = joblib.load(os.path.join(MODEL_DIR, "kmeans_model.pkl"))
-scaler = joblib.load(os.path.join(MODEL_DIR, "scaler_v2.pkl"))
-rf_feature_columns = joblib.load(os.path.join(MODEL_DIR, "rf_feature_columns.pkl"))
-cluster_feature_columns = joblib.load(os.path.join(MODEL_DIR, "cluster_feature_columns.pkl"))
+scaler = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
+rf_feature_columns = joblib.load(os.path.join(MODEL_DIR, "feature_columns.pkl"))
+cluster_feature_columns = joblib.load(os.path.join(MODEL_DIR, "combined_features_v2.pkl"))
 
 GENRE_COLS = ['unknown', 'Action', 'Adventure', 'Animation', "Children's", 'Comedy',
               'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror',
@@ -39,7 +42,6 @@ OCCUPATIONS = ['administrator', 'artist', 'doctor', 'educator', 'engineer',
                'entertainment', 'executive', 'healthcare', 'homemaker', 'lawyer',
                'librarian', 'marketing', 'none', 'other', 'programmer', 'retired',
                'salesman', 'scientist', 'student', 'technician', 'writer']
-
 
 
 # Internal helpers
@@ -76,9 +78,8 @@ def _build_user_row(age, gender, occupation, genre_values, expected_columns):
     return df
 
 
-# ---------------------------------------------------------------------------
 # Public functions — these are what the frontend should call
-# ---------------------------------------------------------------------------
+
 def predict_rating(age, gender, occupation, genre_flags):
     """
     Predicts what rating a user would give a movie.
