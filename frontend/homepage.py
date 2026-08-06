@@ -91,9 +91,9 @@ if find_movies:
     st.session_state.searched_genres = user_selected
 
     # Backend Model Integration Point (Initial batch of 3)
-    poster, link = mia.get_movie_poster('Chronicles (2021)')
+
     st.session_state.recommendations_df = pd.DataFrame({
-        'Title': [f'{user_selected[0]} Chronicles (2021)', f'{user_selected[1]} Returns (2019)',
+        'Title': [f'{user_selected[0]} Chronicles (2021)', f'Obsession (2026)',
                   f'{user_selected[2]} Legacy (2023)'],
         'Main Genre': [user_selected[0], user_selected[1], user_selected[2]],
         'Predicted Rating': [4.9, 4.7, 4.5]
@@ -108,20 +108,31 @@ if st.session_state.recommendations_df is not None:
 
     st.subheader("✨Your Custom Picks for Today:")
 
-    # Display the stored DataFrame
-    st.dataframe(st.session_state.recommendations_df, use_container_width=True, hide_index=True)
+    df = st.session_state.recommendations_df
+
+    # Show each movie as a card with its poster
+    cols = st.columns(len(df))
+    for col, (_, row) in zip(cols, df.iterrows()):
+        with col:
+            poster, link = mia.get_movie_poster(row['Title'])
+            if poster:
+                st.image(poster, use_container_width=True)
+            else:
+                st.write("🎬 (no poster found)")
+            st.caption(row['Title'])
+            st.write(f"⭐ {row['Predicted Rating']}")
+            if link:
+                st.markdown(f"[More info]({link})")
 
     #load more button
     if st.button("Load More Recommendations ➕"):
         sg = st.session_state.searched_genres
 
-        # Simulated next batch from backend ML model
         more_movies = pd.DataFrame({
             'Title': [f'{sg[0]} Part II (2024)', f'{sg[1]} Reloaded (2022)'],
             'Main Genre': [sg[0], sg[1]],
             'Predicted Rating': [4.4, 4.2]
         })
 
-        # Append new picks to existing session state DataFrame & rerun
-        st.session_state.recommendations_df = pd.concat([st.session_state.recommendations_df, more_movies],ignore_index=True)
+        st.session_state.recommendations_df = pd.concat([st.session_state.recommendations_df, more_movies], ignore_index=True)
         st.rerun()
