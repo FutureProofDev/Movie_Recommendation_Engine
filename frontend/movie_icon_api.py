@@ -1,4 +1,8 @@
+<<<<<<< HEAD:AIFINAL/movie_icon_api.py
 import os
+=======
+import streamlit as st
+>>>>>>> 7991b5f466c519f0032bce605d8000ef61579984:frontend/movie_icon_api.py
 import requests
 import streamlit as st
 from dotenv import load_dotenv
