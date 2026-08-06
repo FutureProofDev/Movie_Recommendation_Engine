@@ -1,6 +1,8 @@
 import streamlit as st
 import random
 import pandas as pd
+#import recommender as rc
+import movie_icon_api as mia
 
 st.set_page_config("MOVIE RECOMMENDATION ENGINE", page_icon="🎬", layout="wide")
 
@@ -89,12 +91,15 @@ if find_movies:
     st.session_state.searched_genres = user_selected
 
     # Backend Model Integration Point (Initial batch of 3)
+    poster, link = mia.get_movie_poster('Chronicles (2021)')
     st.session_state.recommendations_df = pd.DataFrame({
         'Title': [f'{user_selected[0]} Chronicles (2021)', f'{user_selected[1]} Returns (2019)',
                   f'{user_selected[2]} Legacy (2023)'],
         'Main Genre': [user_selected[0], user_selected[1], user_selected[2]],
         'Predicted Rating': [4.9, 4.7, 4.5]
     })
+
+
 
 #results
 if st.session_state.recommendations_df is not None:
