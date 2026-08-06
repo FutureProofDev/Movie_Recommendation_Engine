@@ -1,13 +1,9 @@
-import os
-import requests
 import streamlit as st
-from dotenv import load_dotenv
+import requests
 
-load_dotenv()  # reads variables from a local .env file into the environment
+TMDB_API_KEY = "your_key_here"  
 
-TMDB_API_KEY = os.getenv("TMDB_API_KEY")
-
-@st.cache_data(ttl=86400)
+@st.cache_data(ttl=86400)  
 def get_movie_poster(title, year=None):
     resp = requests.get(
         "https://api.themoviedb.org/3/search/movie",
@@ -18,5 +14,5 @@ def get_movie_poster(title, year=None):
         return None, None
     movie = results[0]
     poster_url = f"https://image.tmdb.org/t/p/w342{movie['poster_path']}" if movie.get("poster_path") else None
-    imdb_link = f"https://www.themoviedb.org/movie/{movie['id']}"
+    imdb_link = f"https://www.themoviedb.org/movie/{movie['id']}"  
     return poster_url, imdb_link
