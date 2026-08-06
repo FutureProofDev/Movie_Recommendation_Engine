@@ -40,12 +40,12 @@ if user_type == "1. New User":
 
         st.space(300)
 
-    # Gather selected genres
+    #list for selected genres
     user_selected = [g for g in [g1, g2, g3] if g is not None]
 
     selected_count = len(user_selected)
 
-    # Dynamic feedback box
+    #dynamic feedback box
     if selected_count == 3:
         st.success(
             f"***Selected (3/3): {', '.join(user_selected)}***"
@@ -59,7 +59,7 @@ if user_type == "1. New User":
 
     st.write("")
 
-    # Disable the button until all three genres are selected
+    #disable the button until all three genres are selected
     find_movies = st.button(
             "**Find Movies**",
         type="primary",
@@ -77,21 +77,21 @@ if user_type == "1. New User":
 
 
 if user_type == "2. Existing User":
-    st.caption("You are an existing user and will receive your recommendations")
+    st.caption("You are an existing user but want something new")
 
 
     st.title("🎭 Today's Vibe Questionnaire")
     st.write(
         "Not feeling your usual recommendations? Tell us what you're in the mood for right now, and we'll generate a custom one-time list just for today.")
 
-    # Official MovieLens genres
+    #MovieLens genres list
     genres = [
         'unknown', 'Action', 'Adventure', 'Animation', "Children's", 'Comedy',
         'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror',
         'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'
     ]
 
-    # Initialize session state for the dropdowns
+    #initializing buttons
     if "vibe_g1" not in st.session_state:
         st.session_state.vibe_g1 = None
     if "vibe_g2" not in st.session_state:
@@ -99,13 +99,13 @@ if user_type == "2. Existing User":
     if "vibe_g3" not in st.session_state:
         st.session_state.vibe_g3 = None
 
-    # Randomizer Button
-    if st.button("🎲 I don't know, surprise me!", type="secondary"):
+    #Randomizer Button if user does not know what to pick but wants something different
+    if st.button("I don't know, surprise me!", type="secondary"):
         random_picks = random.sample(genres, 3)
         st.session_state.vibe_g1 = random_picks[0]
         st.session_state.vibe_g2 = random_picks[1]
         st.session_state.vibe_g3 = random_picks[2]
-        st.rerun()  # Refresh to show the new random choices
+        st.rerun()
 
     st.divider()
 
