@@ -32,7 +32,7 @@ def clean_movie_title(title):
 @st.cache_data(ttl=86400)
 def get_movie_poster(title, year=None):
     if not TMDB_API_KEY:
-        st.error("Missing TMDB_API_KEY in your .env file.")
+        print("Missing TMDB_API_KEY in your .env file.")
         return None, None
 
     # Clean title and extract year
