@@ -1,4 +1,4 @@
-from recommender import predict_rating, get_user_cluster, get_model_info
+from backend.recommender import predict_rating, get_user_cluster, get_model_info
 
 print(get_model_info())
 
