@@ -1,9 +1,8 @@
 import sys
 from pathlib import Path
 
-# Add the project root directory (one level up from frontend) to sys.path
+# Add project root directory to sys.path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-
 
 import streamlit as st
 import random
@@ -47,6 +46,43 @@ def generate_real_recommendations(user_profile, selected_genres, movies_df, top_
 
 st.set_page_config(page_title="MOVIE RECOMMENDATION ENGINE", page_icon="🎬", layout="wide")
 
+
+# --- DATA LOADING ---
+# --- DATA LOADING ---
+@st.cache_data
+def load_movie_catalog():
+    """Loads and parses the MovieLens movie dataset directly."""
+    # Base path relative to project root
+    catalog_path = Path(__file__).resolve().parent.parent / "data" / "ml-100k" / "u.item"
+
+    # Check if u.item exists (standard MovieLens 100k format)
+    if catalog_path.exists():
+        cols = ['movie_id', 'title', 'release_date', 'video_release_date', 'IMDb_URL',
+                'unknown', 'Action', 'Adventure', 'Animation', "Children's", 'Comedy',
+                'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror',
+                'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
+        df = pd.read_csv(catalog_path, sep='|', names=cols, encoding='latin-1')
+
+        # Build the 'genres' pipe-separated string for compatibility
+        genre_cols = cols[5:]
+
+        def extract_genres(row):
+            active = [g for g in genre_cols if row[g] == 1]
+            return '|'.join(active) if active else 'Unknown'
+
+        df['genres'] = df.apply(extract_genres, axis=1)
+        return df[['title', 'genres']]
+
+    # Alternative: check for movies.csv if using ml-latest / ml-25m format
+    csv_path = Path(__file__).resolve().parent.parent / "data" / "movies.csv"
+    if csv_path.exists():
+        return pd.read_csv(csv_path)
+
+    # Fallback error if dataset file isn't found in expected paths
+    raise FileNotFoundError("Could not locate u.item or movies.csv in the data directory.")
+
+
+movies_df = load_movie_catalog()
 
 # --- SIDEBAR ---
 with st.sidebar:
@@ -140,7 +176,7 @@ genres = [
     'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'
 ]
 
-# Initializing session state for the randomizer
+# Initializing session state for the randomizer and recommendation count
 if "g1_val" not in st.session_state:
     st.session_state.g1_val = None
 if "g2_val" not in st.session_state:
@@ -152,6 +188,8 @@ if "recommendations_df" not in st.session_state:
     st.session_state.recommendations_df = None
 if "searched_genres" not in st.session_state:
     st.session_state.searched_genres = []
+if "rec_count" not in st.session_state:
+    st.session_state.rec_count = 3
 
 # Randomizer button
 if st.button("🎲 I don't know, surprise me!", type="secondary"):
@@ -200,42 +238,45 @@ find_movies = st.button(
     disabled=not (profile_complete and selected_count == 3)
 )
 
-# --- RESULTS SECTION ---
+# --- RESULTS GENERATION ---
 if find_movies:
     st.session_state.searched_genres = user_selected
+    st.session_state.rec_count = 3  # Reset count to 3 on new search
 
-    # Temporary fallback catalog until movies.csv loading is added
-    fallback_catalog = pd.DataFrame({
-        'title': ['Toy Story (1995)', 'Star Wars (1977)', 'Godfather, The (1972)', 'Pulp Fiction (1994)', 'Matrix, The (1999)'],
-        'genres': ['Animation|Children\'s|Comedy', 'Action|Adventure|Sci-Fi', 'Crime|Drama', 'Crime|Drama', 'Action|Sci-Fi']
-    })
-
-    with st.spinner("Calculating custom ML predictions..."):
+    with st.spinner("Calculating custom ML predictions across dataset..."):
         st.session_state.recommendations_df = generate_real_recommendations(
             user_profile=st.session_state.user_profile,
             selected_genres=user_selected,
-            movies_df=fallback_catalog,
-            top_n=3
+            movies_df=movies_df,
+            top_n=12  # Pre-score top 12 candidates so "Load More" is fast
         )
 
-# Results Display
+# --- RESULTS DISPLAY ---
 if st.session_state.recommendations_df is not None:
     st.divider()
     st.success(f"Finding the best {', '.join(st.session_state.searched_genres)} movies for you right now...")
 
     st.subheader("Your Custom Picks for Today:")
 
-    df = st.session_state.recommendations_df
+    df = st.session_state.recommendations_df.head(st.session_state.rec_count)
 
-    cols = st.columns(len(df))
-    for col, (_, row) in zip(cols, df.iterrows()):
+    cols = st.columns(min(len(df), 3))
+    for i, (_, row) in enumerate(df.iterrows()):
+        col = cols[i % 3]
         with col:
             poster, link = mia.get_movie_poster(row['Title'])
             if poster:
                 st.image(poster, width=200)
             else:
-                print("🎬 (no poster found)")
-            st.caption(row['Title'])
-            st.write(f" Predicted Rating: *{row['Predicted Rating']}*")
+                st.caption("🎬 (no poster found)")
+            st.markdown(f"**{row['Title']}**")
+            st.write(f"Predicted Rating: *{row['Predicted Rating']:.2f} / 5.0*")
             if link:
                 st.markdown(f"[More info]({link})")
+            st.write("---")
+
+    # Load More Button
+    if st.session_state.rec_count < len(st.session_state.recommendations_df):
+        if st.button("➕ Load More Recommendations"):
+            st.session_state.rec_count += 3
+            st.rerun()
