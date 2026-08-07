@@ -23,3 +23,9 @@ __pycache__/
 !data/.gitkeep
 
 .DS_store
+# Ignore large datasets and model files
+*.pkl
+*.zip
+data/
+
+./data*.pkl
