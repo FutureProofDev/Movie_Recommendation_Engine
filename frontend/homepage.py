@@ -223,7 +223,7 @@ if st.session_state.recommendations_df is not None:
     st.divider()
     st.success(f"Finding the best {', '.join(st.session_state.searched_genres)} movies for you right now...")
 
-    st.subheader("✨Your Custom Picks for Today:")
+    st.subheader("Your Custom Picks for Today:")
 
     df = st.session_state.recommendations_df
 
@@ -232,10 +232,10 @@ if st.session_state.recommendations_df is not None:
         with col:
             poster, link = mia.get_movie_poster(row['Title'])
             if poster:
-                st.image(poster, use_container_width=True)
+                st.image(poster, width=200)
             else:
-                st.write("🎬 (no poster found)")
+                print("🎬 (no poster found)")
             st.caption(row['Title'])
-            st.write(f"⭐ Predicted Rating: *{row['Predicted Rating']}*")
+            st.write(f" Predicted Rating: *{row['Predicted Rating']}*")
             if link:
-                st.markdown(f"[More info ↗️]({link})")
+                st.markdown(f"[More info]({link})")
