@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
+
 def clean_movie_title(title):
     """
     Converts MovieLens titles into standard search queries.
@@ -42,7 +43,7 @@ def get_movie_poster(title, year=None):
     # Search TMDB API
     url = "https://api.themoviedb.org/3/search/movie"
     params = {"api_key": TMDB_API_KEY, "query": clean_name, "year": search_year}
-    
+
     results = requests.get(url, params=params).json().get("results", [])
 
     # If no results with year, retry searching with title only
@@ -57,8 +58,10 @@ def get_movie_poster(title, year=None):
     # Build poster image and movie links
     movie = results[0]
     poster_path = movie.get("poster_path")
-    
-    poster_url = f"https://image.tmdb.org/t/p/w342{poster_path}" if poster_path else None
+
+    poster_url = (
+        f"https://image.tmdb.org/t/p/w342{poster_path}" if poster_path else None
+    )
     tmdb_link = f"https://www.themoviedb.org/movie/{movie['id']}"
 
     return poster_url, tmdb_link
