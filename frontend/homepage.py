@@ -97,7 +97,7 @@ with st.sidebar:
 col1, col2, col3 = st.columns([9, 25, 5])
 
 with col2:
-    st.title("🎬 MOVIE RECOMMENDATION ENGINE")
+    st.title("MOVIE RECOMMENDATION ENGINE")
     st.caption("Personalized picks based on your AI cluster & selected mood")
 
 st.divider()
@@ -110,7 +110,7 @@ if "user_profile" not in st.session_state:
         "occupation": None
     }
 
-st.subheader("🎭 Today's Vibe Questionnaire")
+st.subheader("Today's Vibe Questionnaire")
 
 st.markdown("#### 👤 Tell us about yourself")
 d1, d2, d3 = st.columns(3)
@@ -206,17 +206,17 @@ c1, c2, c3 = st.columns(3)
 
 with c1:
     idx1 = genres.index(st.session_state.g1_val) if st.session_state.g1_val in genres else None
-    g1 = st.selectbox("1.What are you in the mood for?", options=genres, index=idx1, placeholder="Choose an option", key="g1_val")
+    g1 = st.selectbox("1. What are you in the mood for?", options=genres, index=idx1, placeholder="Choose an option", key="g1_val")
 
 with c2:
     g2_options = [g for g in genres if g != g1]
     idx2 = g2_options.index(st.session_state.g2_val) if st.session_state.g2_val in g2_options else None
-    g2 = st.selectbox("2.Anything else you want to see?", options=g2_options, index=idx2, placeholder="Choose an option", key="g2_val")
+    g2 = st.selectbox("2. Anything else you want to see?", options=g2_options, index=idx2, placeholder="Choose an option", key="g2_val")
 
 with c3:
     g3_options = [g for g in genres if g not in [g1, g2]]
     idx3 = g3_options.index(st.session_state.g3_val) if st.session_state.g3_val in g3_options else None
-    g3 = st.selectbox("3.Last spice to the sauce", options=g3_options, index=idx3, placeholder="Choose an option", key="g3_val")
+    g3 = st.selectbox("3. Last spice to the sauce", options=g3_options, index=idx3, placeholder="Choose an option", key="g3_val")
 
 # Selected list
 user_selected = [g for g in [g1, g2, g3] if g is not None]
