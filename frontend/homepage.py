@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-# Add project root directory to sys.path
+# Adding project root directory to sys.path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 import streamlit as st
@@ -48,14 +48,13 @@ st.set_page_config(page_title="MOVIE RECOMMENDATION ENGINE", page_icon="🎬", l
 
 
 # --- DATA LOADING ---
-# --- DATA LOADING ---
 @st.cache_data
 def load_movie_catalog():
     """Loads and parses the MovieLens movie dataset directly."""
     # Base path relative to project root
     catalog_path = Path(__file__).resolve().parent.parent / "data" / "ml-100k" / "u.item"
 
-    # Check if u.item exists (standard MovieLens 100k format)
+    # Check if u.item exists
     if catalog_path.exists():
         cols = ['movie_id', 'title', 'release_date', 'video_release_date', 'IMDb_URL',
                 'unknown', 'Action', 'Adventure', 'Animation', "Children's", 'Comedy',
@@ -84,7 +83,7 @@ def load_movie_catalog():
 
 movies_df = load_movie_catalog()
 
-# --- SIDEBAR ---
+#Sidebar
 with st.sidebar:
     st.header('About App')
     st.write('''\n This app is for users to get movie recommendations using various techniques learned in **CS 254: Introduction to Artificial Intelligence**. \n 
@@ -102,7 +101,7 @@ with col2:
 
 st.divider()
 
-# Initialize session state for user profile
+# Initializing session state for user details (user_profile)
 if "user_profile" not in st.session_state:
     st.session_state.user_profile = {
         "age": None,
@@ -158,12 +157,13 @@ with d3:
         format_func=lambda x: x.capitalize()
     )
 
-# Save demographic choices to session state
+# Saving demographic choices to session state
 st.session_state.user_profile = {
     "age": user_age,
     "gender": user_gender,
     "occupation": user_occ
 }
+st.space(250)
 
 st.divider()
 
@@ -191,7 +191,7 @@ if "searched_genres" not in st.session_state:
 if "rec_count" not in st.session_state:
     st.session_state.rec_count = 3
 
-# Randomizer button
+# Randomizer button for random selection
 if st.button("🎲 I don't know, surprise me!", type="secondary"):
     random_picks = random.sample(genres, 3)
     st.session_state.g1_val = random_picks[0]
@@ -238,12 +238,12 @@ find_movies = st.button(
     disabled=not (profile_complete and selected_count == 3)
 )
 
-# --- RESULTS GENERATION ---
+# RESULTS GENERATION
 if find_movies:
     st.session_state.searched_genres = user_selected
     st.session_state.rec_count = 3  # Reset count to 3 on new search
 
-    with st.spinner("Calculating custom ML predictions across dataset..."):
+    with st.spinner():
         st.session_state.recommendations_df = generate_real_recommendations(
             user_profile=st.session_state.user_profile,
             selected_genres=user_selected,

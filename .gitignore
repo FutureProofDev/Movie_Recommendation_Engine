@@ -32,5 +32,6 @@ data/
 # Large data files
 ./data*.pkl
 
-# Streamlit secrets
-.streamlit/secrets.toml
+# Match secrets.toml anywhere in the repository
+**/secrets.toml
+**/.streamlit/secrets.toml
