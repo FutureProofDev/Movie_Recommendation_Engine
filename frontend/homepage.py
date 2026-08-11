@@ -141,10 +141,10 @@ with d2:
 # 3. Occupation Dropdown
 with d3:
     occupations_list = [
-        'administrator', 'artist', 'doctor', 'educator', 'engineer',
+        'none', 'other', 'student','administrator', 'artist', 'doctor', 'educator', 'engineer',
         'entertainment', 'executive', 'healthcare', 'homemaker', 'lawyer',
-        'librarian', 'marketing', 'none', 'other', 'programmer', 'retired',
-        'salesman', 'scientist', 'student', 'technician', 'writer'
+        'librarian', 'marketing',  'programmer', 'retired',
+        'salesman', 'scientist',  'technician', 'writer'
     ]
     saved_occ = st.session_state.user_profile.get("occupation")
     occ_idx = occupations_list.index(saved_occ) if saved_occ in occupations_list else None

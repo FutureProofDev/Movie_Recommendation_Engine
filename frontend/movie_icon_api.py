@@ -1,11 +1,10 @@
-import os
+import re
 import requests
 import streamlit as st
 from dotenv import load_dotenv
 
 # Load TMDB API key from .env file
-load_dotenv()
-TMDB_API_KEY = os.getenv("TMDB_API_KEY")
+TMDB_API_KEY = st.secrets["TMDB_API_KEY"]
 
 
 def clean_movie_title(title):
@@ -15,25 +14,32 @@ def clean_movie_title(title):
     """
     year = None
 
-    # 1. Extract the year from parentheses at the end: "(1972)"
-    if "(" in title and title.endswith(")"):
-        title, year_part = title.rsplit("(", 1)
-        year = year_part.rstrip(")").strip()
-        title = title.strip()
+    # Extracts 4-digit year at the end inside parentheses
+    year_match = re.search(r"\s*\((\d{4})\)\s*$", title)
+    if year_match:
+        year = year_match.group(1)
+        title = title[: year_match.start()].strip()
 
-    # 2. Fix flipped titles: "Godfather, The" -> "The Godfather"
-    if ", " in title:
-        main_title, article = title.rsplit(", ", 1)
-        if article.lower() in ["the", "a", "an"]:
-            title = f"{article} {main_title}"
+    # Remove any remaining parenthetical notes
+    title = re.sub(r"\s*\([^)]*\)", "", title).strip()
 
-    return title, year
+    # Rearrange trailing articles at the end of the title (case-insensitive)
+    # Supports English and common foreign articles: The, A, An, Les, La, Le, Das, Der, Die
+    article_match = re.search(
+        r",\s*(The|A|An|Les|La|Le|Das|Der|Die)\s*$", title, re.IGNORECASE
+    )
+    if article_match:
+        article = article_match.group(1)
+        main_title = title[: article_match.start()].strip()
+        title = f"{article.capitalize()} {main_title}"
+
+    return title, year  
 
 
-@st.cache_data(ttl=86400)
+@st.cache_data(ttl=86400, show_spinner = False)
 def get_movie_poster(title, year=None):
     if not TMDB_API_KEY:
-        print("Missing TMDB_API_KEY in your .env file.")
+        print("Missing TMDB_API_KEY")
         return None, None
 
     # Clean title and extract year
