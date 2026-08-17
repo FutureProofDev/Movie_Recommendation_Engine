@@ -81,6 +81,7 @@ Enter your age, gender, and occupation, pick three genres (or hit
 ### Where everything lives
 
 Movie_Recommendation_Engine/
+
 ├── backend/
 │   ├── notebooks/          # the ML pipeline, in order — start here to understand the "how"
 
