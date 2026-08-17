@@ -47,10 +47,11 @@ def generate_real_recommendations(user_profile, selected_genres, movies_df, top_
 st.set_page_config(page_title="MOVIE RECOMMENDATION ENGINE", page_icon="🎬", layout="wide")
 
 
-# --- DATA LOADING ---
+#  DATA LOADING 
 @st.cache_data
 def load_movie_catalog():
     """Loads and parses the MovieLens movie dataset directly."""
+
     # Base path relative to project root
     catalog_path = Path(__file__).resolve().parent.parent / "data" / "ml-100k" / "u.item"
 
@@ -62,7 +63,7 @@ def load_movie_catalog():
                 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
         df = pd.read_csv(catalog_path, sep='|', names=cols, encoding='latin-1')
 
-        # Build the 'genres' pipe-separated string for compatibility
+        #B Building genre separator
         genre_cols = cols[5:]
 
         def extract_genres(row):
@@ -72,7 +73,7 @@ def load_movie_catalog():
         df['genres'] = df.apply(extract_genres, axis=1)
         return df[['title', 'genres']]
 
-    # Alternative: check for movies.csv if using ml-latest / ml-25m format
+    # Fallback to movies.csv if u.item is not found
     csv_path = Path(__file__).resolve().parent.parent / "data" / "movies.csv"
     if csv_path.exists():
         return pd.read_csv(csv_path)
@@ -101,7 +102,7 @@ with col2:
 
 st.divider()
 
-# Initializing session state for user details (user_profile)
+# Initializing session state for user details
 if "user_profile" not in st.session_state:
     st.session_state.user_profile = {
         "age": None,
@@ -251,7 +252,7 @@ if find_movies:
             top_n=12  # Pre-score top 12 candidates so "Load More" is fast
         )
 
-# --- RESULTS DISPLAY ---
+# RESULTS DISPLAY 
 if st.session_state.recommendations_df is not None:
     st.divider()
     st.success(f"Finding the best {', '.join(st.session_state.searched_genres)} movies for you right now...")
