@@ -163,7 +163,7 @@ st.session_state.user_profile = {
     "gender": user_gender,
     "occupation": user_occ
 }
-st.space(250)
+st.space(120)
 
 st.divider()
 
