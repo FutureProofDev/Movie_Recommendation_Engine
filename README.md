@@ -1,7 +1,7 @@
 ## Setup Instructions
 
 These steps let anyone clone this repository and run the application locally
-to see how it works, end to end — from the trained ML models to the live
+to see how it works, end to end, from the trained ML models to the live
 recommendation interface.
 
 ### 1. Clone the repository
