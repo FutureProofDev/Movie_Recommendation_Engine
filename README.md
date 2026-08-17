@@ -82,7 +82,9 @@ Enter your age, gender, and occupation, pick three genres (or hit
 
 Movie_Recommendation_Engine/
 
+
 ├── backend/
+
 │   ├── notebooks/          # the ML pipeline, in order — start here to understand the "how"
 
 │   ├── models/              # pre-trained model files (loaded automatically, no retraining needed)
