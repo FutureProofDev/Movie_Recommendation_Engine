@@ -21,13 +21,12 @@ import joblib
 import pandas as pd
 import os
 
-# Load models once, at import time (not on every function call)
+# Load models once
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "models")
 
-# NOTE: filenames below match what 02_feature_engineering.ipynb and
-# 03_regression_model.ipynb actually save to disk — keep these in sync
-# if the save cells in either notebook are ever renamed.
+
+
 rf_model = joblib.load(os.path.join(MODEL_DIR, "random_forest_model.pkl"))
 kmeans_model = joblib.load(os.path.join(MODEL_DIR, "kmeans_model.pkl"))
 scaler = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
@@ -58,10 +57,10 @@ def _build_user_row(age, gender, occupation, genre_values, expected_columns):
     for genre in GENRE_COLS:
         row[genre] = genre_values.get(genre, 0)
 
-    # One-hot encode gender (drop_first=True means only gender_M exists)
+    # One-hot encode gender 
     row["gender_M"] = 1 if str(gender).upper() == "M" else 0
 
-    # One-hot encode occupation (drop_first=True dropped 'administrator')
+    # One-hot encode occupation 
     for occ in OCCUPATIONS:
         col_name = f"occupation_{occ}"
         if col_name in expected_columns:
@@ -69,7 +68,7 @@ def _build_user_row(age, gender, occupation, genre_values, expected_columns):
 
     df = pd.DataFrame([row])
 
-    # Ensure all expected columns exist, fill any missing with 0, and order correctly
+    # Ensuring all the columns the model expects are present.
     for col in expected_columns:
         if col not in df.columns:
             df[col] = 0
@@ -78,7 +77,7 @@ def _build_user_row(age, gender, occupation, genre_values, expected_columns):
     return df
 
 
-# Public functions — these are what the frontend should call
+# Public functions: these are what the frontend should call
 
 def predict_rating(age, gender, occupation, genre_flags):
     """
