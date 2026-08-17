@@ -100,6 +100,7 @@ with col2:
     st.title("MOVIE RECOMMENDATION ENGINE")
     st.caption("Personalized picks based on your AI cluster & selected mood")
 
+
 st.divider()
 
 # Initializing session state for user details
@@ -281,3 +282,5 @@ if st.session_state.recommendations_df is not None:
         if st.button("➕ Load More Recommendations"):
             st.session_state.rec_count += 3
             st.rerun()
+
+st.caption("Disclaimer: Recommendations may contain inaccuracies. These recommendations are based on a 1998 dataset, hence recommendations are limited by the dataset and its the findings.")
