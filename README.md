@@ -100,8 +100,9 @@ Movie_Recommendation_Engine/
 
 └── requirements.txt
 
-### Project Done By:
-### Lisa Baer
-### Natalie-Rose Andzie-Mensah
-### Vladimir Noel Aduama
-### Nii Sowah KWabla Sowah
+### Project Done By ツ゚:
+
+- [Lisa Baer](https://github.com/lisadbaer)
+- [Natalie-Rose Andzie-Mensah](https://github.com/natalierose-am)
+- [Vladimir Noel Aduama](https://github.com/FutureProofDev)
+- [Nii Sowah Kwabla Sowah](https://github.com/Nii-Sowah)
