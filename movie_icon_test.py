@@ -143,16 +143,12 @@ def get_recommendations(genre_filter=None):
     return mock_movies
 
 
-# ---------------------------------------------------------------------------
-# NAVIGATION
-# ---------------------------------------------------------------------------
+
 page = st.radio("Navigate", ["🏠 Home", "📋 Questionnaire"], horizontal=True, label_visibility="collapsed")
 st.divider()
 
 
-# ---------------------------------------------------------------------------
-# HOME PAGE
-# ---------------------------------------------------------------------------
+
 if page == "🏠 Home":
     col1, col2, col3 = st.columns([9, 25, 5])
     with col2:
@@ -172,9 +168,7 @@ if page == "🏠 Home":
             st.info("Fetching next 5 recommendations from cluster...")
 
 
-# ---------------------------------------------------------------------------
-# QUESTIONNAIRE PAGE
-# ---------------------------------------------------------------------------
+
 elif page == "📋 Questionnaire":
     col1, col2, col3 = st.columns([9, 25, 5])
     with col2:
