@@ -83,13 +83,21 @@ Enter your age, gender, and occupation, pick three genres (or hit
 Movie_Recommendation_Engine/
 ├── backend/
 │   ├── notebooks/          # the ML pipeline, in order — start here to understand the "how"
+
 │   ├── models/              # pre-trained model files (loaded automatically, no retraining needed)
+
 │   └── recommender.py       # the interface between the models and the app
+
 ├── frontend/
+
 │   ├── homepage.py          # the Streamlit app itself
+
 │   └── movie_icon_api.py    # fetches movie posters from TMDB
+
 ├── data/ml-100k/            # the MovieLens dataset, included directly in the repo
+
 ├── testing recommender.py   # a standalone script to verify the backend works
+
 └── requirements.txt
 
 ### Project Done By:
